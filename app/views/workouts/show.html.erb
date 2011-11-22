@@ -1,0 +1,20 @@
+<% title "Workout" %>
+
+<p>
+  <strong>Workoutdate:</strong>
+  <%= @workout.workoutdate %>
+</p>
+
+<ol>
+<% for interval in @workout.intervals %>
+  <li>
+    <%= interval.interval_name %>
+  </li>
+<% end %>
+</ol>
+
+<p>
+  <%= link_to "Edit", edit_workout_path(@workout) %> |
+  <%= link_to "Destroy", @workout, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", workouts_path %>
+</p>

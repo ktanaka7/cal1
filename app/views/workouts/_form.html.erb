@@ -1,0 +1,11 @@
+<%= nested_form_for @workout do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :workoutdate %><br />
+    <%= f.hidden_field(:workoutdate, :value => date) %>
+  </p>
+  <%= f.fields_for :intervals %>
+  <p><%= f.link_to_add "Add interval", :intervals %></p>
+  <p><%= f.submit "Submit" %></p>
+<% end %>
+ 
