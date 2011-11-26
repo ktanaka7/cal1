@@ -1,8 +1,14 @@
 <% title "Edit Workout" %>
 
-<%= render 'form' %>
+<p>
+  <strong>Workoutdate:</strong>
+  <%= @workout.workoutdate %>
+</p>
+
+<%= render 'form', :date => @workout.workoutdate %>
 
 <p>
   <%= link_to "Show", @workout %> |
-  <%= link_to "View All", workouts_path %>
+  <%= link_to "Destroy", @workout, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", workouts_path %> 
 </p>
