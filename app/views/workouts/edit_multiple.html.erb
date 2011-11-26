@@ -1,0 +1,51 @@
+<% title "Workouts" %>
+
+<div id ="calendar">
+  <h2 id="month">
+    <%= link_to "<", :month => (@date.beginning_of_month-1).strftime("%Y-%m") %>
+    <%=h @date.strftime("%B %Y") %>
+    <%= link_to ">", :month => (@date.end_of_month+1).strftime("%Y-%m") %>
+  </h2>
+<%= form_for :workout, :url => update_multiple_workouts_path, :html => { :method => :put } do |f| %>
+  <%= f.error_messages %>
+  <%= calendar_for @workouts, :year => @date.year, :month => @date.month do |calendar| %>
+    <%= calendar.head('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') %>
+    <% calendar.day(:day_method => :workoutdate) do |date, workouts| %>
+      <%= date.day %>
+      <ul>
+	<% if workouts.length == 0
+	   @workout = Workout.new
+	   @workout.id = 0
+	   @workout.workoutdate = date
+	   3.times do
+	     @workout.intervals.build
+	     @workout.intervals[-1].id = 0
+	   end 
+	   workouts[0] = @workout
+	%>
+	<% end %>
+        <% for @workout in workouts %>
+	  <%= hidden_field_tag "workout_workoutdates[]", @workout.workoutdate %>
+	  <%= hidden_field_tag @workout.workoutdate.strftime("%Y-%m-%d") + "_workout_interval_count", @workout.intervals.length %>
+	  <div class="fields">
+	  <% for i in 0..@workout.intervals.length-1 %>
+            <p>
+	      <%= f.label "Interval" %>
+	      <%= text_field_tag @workout.workoutdate.strftime("%Y-%m-%d") + "_interval_" + i.to_s + "_interval_name", @workout.intervals[i].interval_name %>
+	      <%= link_to "remove", edit_multiple_workouts_path(:date => date, :id => i, :cmd => 'remove_interval') %>
+	    </p>
+          <% end %>
+	  </div>
+	  <p><%= link_to "Add interval", edit_multiple_workouts_path(:date => date, :cmd => 'add_interval') %></p>
+	  </center>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+  <p><%= f.submit "Submit" %></p>
+<% end %>
+
+
+</div>
+
+<p><%= link_to "View All", workouts_path %></p>
