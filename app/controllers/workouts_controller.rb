@@ -51,9 +51,18 @@ class WorkoutsController < ApplicationController
     case params[:cmd]
     when "add_interval"
       @workouts = Workout.where(:workoutdate => params[:date].to_time)
-      workout =  @workouts[0]
-      workout.intervals.build
-      workout.save
+      if @workouts.any?
+        workout =  @workouts[0]
+        workout.intervals.build
+        workout.save
+      else
+        workout = Workout.new
+        workout.workoutdate = params[:date]
+        4.times do 
+          workout.intervals.build
+        end
+        workout.save
+      end
     when "remove_interval"
       @workouts = Workout.where(:workoutdate => params[:date].to_time)
       if @workouts.any?
